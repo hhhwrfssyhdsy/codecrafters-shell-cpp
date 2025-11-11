@@ -1,12 +1,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <set>
 #include <sstream>
 
 int main() {
     // Flush after every std::cout / std:cerr
     std::string command;
-    
+    std::set<std::string> builtin_commands={"echo","type","exit"};
     while(1){
         std::cout << "$ "; 
         std::getline(std::cin, command);
@@ -35,9 +36,17 @@ int main() {
               std::cout<<split_commands[i]<<' ';
             }
             std::cout<<std::endl;
-        } else {
+        }else if(split_commands[0] == "type"){
+            if(builtin_commands.count(split_commands[1])==1){
+              std::cout<<split_commands[1]<<" is a shell builtin"<<std::endl;
+            }else{
+               std::cout << command << ": command not found" << std::endl;
+            }
+        }else {
             std::cout << command << ": command not found" << std::endl;
         }
+        
+        
     }
     
     return 0;
