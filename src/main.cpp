@@ -40,7 +40,7 @@ int main() {
             if(builtin_commands.count(split_commands[1])==1){
               std::cout<<split_commands[1]<<" is a shell builtin"<<std::endl;
             }else{
-               std::cout << command << ": command not found" << std::endl;
+               std::cout << command[1] << ": command not found" << std::endl;
             }
         }else {
             std::cout << command << ": command not found" << std::endl;
