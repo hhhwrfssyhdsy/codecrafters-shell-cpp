@@ -30,6 +30,11 @@ int main() {
             if(split_commands.size() > 1 && split_commands[1] == "0") {
                 break;
             }
+        }else if(split_commands[0] == "echo"){
+            for(int i=1;i<split_commands.size();i++){
+              std::cout<<split_commands[i]<<' ';
+            }
+            std::cout<<std::endl;
         } else {
             std::cout << command << ": command not found" << std::endl;
         }
