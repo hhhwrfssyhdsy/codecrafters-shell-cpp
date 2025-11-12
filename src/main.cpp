@@ -85,7 +85,7 @@ int main() {
             //TODO: execute exeternal command with multiple params 
             auto command_path = check_command_in_path(split_commands[0]);
             std::vector<char*> params;
-            for(int i=1;i<split_commands.size();i++){
+            for(int i=0;i<split_commands.size();i++){
                 params.push_back(const_cast<char*>(split_commands[i].c_str()));
             }
             params.push_back(nullptr);
