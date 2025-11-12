@@ -1,14 +1,14 @@
 #include <iostream>
 #include <dirent.h>
 #include <vector>
-#include <set>
 #include <sys/wait.h>
 #include "core/path_utils.h"
+#include "core/builtin.h"
+#include "navigation/pwd.h"
 
 int main() {
     // Flush after every std::cout / std:cerr
     std::string command;
-    std::set<std::string> builtin_commands={"echo","type","exit"};
     while(1){
         std::cout << "$ "; 
         std::getline(std::cin, command);
@@ -27,7 +27,7 @@ int main() {
         if(split_commands.empty()) {
             continue; // 空命令，重新输入
         }
-        
+        //TODO:改为switch case结构
         if (split_commands[0] == "exit") {
             if(split_commands.size() > 1 && split_commands[1] == "0") {
                 break;
@@ -49,6 +49,8 @@ int main() {
                     std::cout << split_commands[1] << ": not found" << std::endl;
                 }
             }
+        }else if(split_commands[0] == "pwd"){
+            path_locate();
         }else { 
             auto command_path = check_command_in_path(split_commands[0]);
             std::vector<char*> params;
