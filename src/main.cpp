@@ -6,7 +6,36 @@
 #include <set>
 #include <sstream>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <unistd.h>
+
+
+// @brief: check if the command is in the system path 
+// @ret: return the full path of the command executable bin
+std::string check_command_in_path(std::string command){
+    // Check in PATH directories
+    const char* path_env = getenv("PATH");
+    std::string full_path="";
+    if (path_env != nullptr) {
+        std::string path_str(path_env);
+        std::stringstream path_ss(path_str);
+        std::string dir;
+        while (std::getline(path_ss, dir, ':')) {
+            full_path = dir + "/" + command;
+            struct stat stat_buf;
+            if (stat(full_path.c_str(), &stat_buf) == 0) {
+                // File exists, check if it's executable
+                if (access(full_path.c_str(), X_OK) == 0) {
+                    break;
+                }
+            }
+        }
+    } 
+    return full_path;
+}
+
+
+
 
 int main() {
     // Flush after every std::cout / std:cerr
@@ -45,37 +74,34 @@ int main() {
             if(builtin_commands.count(split_commands[1]) == 1){
                 std::cout << split_commands[1] << " is a shell builtin" << std::endl;
             } else {
-                // Check in PATH directories
-                const char* path_env = getenv("PATH");
-                if (path_env != nullptr) {
-                    std::string path_str(path_env);
-                    std::stringstream path_ss(path_str);
-                    std::string dir;
-                    bool found = false;
-                    
-                    while (std::getline(path_ss, dir, ':')) {
-                        std::string full_path = dir + "/" + split_commands[1];
-                        struct stat stat_buf;
-                        
-                        if (stat(full_path.c_str(), &stat_buf) == 0) {
-                            // File exists, check if it's executable
-                            if (access(full_path.c_str(), X_OK) == 0) {
-                                std::cout << split_commands[1] << " is " << full_path << std::endl;
-                                found = true;
-                                break;
-                            }
-                        }
-                    }
-                    
-                    if (!found) {
-                        std::cout << split_commands[1] << ": not found" << std::endl;
-                    }
-                } else {
-                    std::cout << split_commands[1] << ": not found" << std::endl;
+                std::string full_path = check_command_in_path(split_commands[1]);
+                if (!full_path.empty()){
+                    std::cout << command << " is " << full_path << std::endl;
+                }else{ 
+                    std::cout << command << ": not found" << std::endl;
                 }
             }
         }else {
+            //TODO: execute exeternal command with multiple params 
+            auto command_path = check_command_in_path(split_commands[0]);
+            std::vector<char*> params;
+            for(int i=1;i<split_commands.size();i++){
+                params.push_back(const_cast<char*>(split_commands[i].c_str()));
+            }
+            params.push_back(nullptr);
+            if(!command_path.empty()){
+                pid_t pid = fork();
+                if (pid==0)
+                {
+                    execv(command_path.c_str(),params.data());
+                }else if (pid>0)
+                {
+                    int status;
+                    waitpid(pid, &status,0);
+                }
+            }else{
             std::cout << command << ": command not found" << std::endl;
+            }
         }
     }
     
