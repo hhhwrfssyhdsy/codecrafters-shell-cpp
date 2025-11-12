@@ -76,9 +76,9 @@ int main() {
             } else {
                 std::string full_path = check_command_in_path(split_commands[1]);
                 if (!full_path.empty()){
-                    std::cout << command << " is " << full_path << std::endl;
+                    std::cout << split_commands[1] << " is " << full_path << std::endl;
                 }else{ 
-                    std::cout << command << ": not found" << std::endl;
+                    std::cout << split_commands[1] << ": not found" << std::endl;
                 }
             }
         }else {
