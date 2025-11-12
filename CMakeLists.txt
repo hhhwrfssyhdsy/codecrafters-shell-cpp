@@ -1,11 +1,23 @@
 cmake_minimum_required(VERSION 3.13)
+project(shell-starter-cpp LANGUAGES CXX)
 
-project(shell-starter-cpp)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-file(GLOB_RECURSE SOURCE_FILES src/*.cpp src/*.hpp)
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
-set(CMAKE_CXX_STANDARD 23) # Enable the C++23 standard
+file(GLOB_RECURSE SOURCE_FILES
+    ${CMAKE_SOURCE_DIR}/src/*.cpp
+)
 
 add_executable(shell ${SOURCE_FILES})
 
-target_link_libraries(shell PRIVATE readline)
+
+find_library(READLINE_LIB readline)
+if(READLINE_LIB)
+    message(STATUS "Found readline: ${READLINE_LIB}")
+    target_link_libraries(shell PRIVATE ${READLINE_LIB})
+else()
+    message(WARNING "libreadline not found, skipping link")
+endif()

@@ -32,3 +32,7 @@ Note: This section is for stages 2 and beyond.
    `src/main.cpp`.
 1. Commit your changes and run `git push origin master` to submit your solution
    to CodeCrafters. Test output will be streamed to your terminal.
+
+# Project Structure
+
+`core` include all the files that provide the function for system call, such as **command execute**, **path search**, **environment varieties**.
