@@ -15,6 +15,7 @@
 std::string check_command_in_path(std::string command){
     // Check in PATH directories
     const char* path_env = getenv("PATH");
+    bool found=0;
     std::string full_path="";
     if (path_env != nullptr) {
         std::string path_str(path_env);
@@ -26,11 +27,16 @@ std::string check_command_in_path(std::string command){
             if (stat(full_path.c_str(), &stat_buf) == 0) {
                 // File exists, check if it's executable
                 if (access(full_path.c_str(), X_OK) == 0) {
+                    found = true;
                     break;
                 }
             }
         }
     } 
+    if (!found)
+    {
+        full_path.clear();   
+    }
     return full_path;
 }
 
