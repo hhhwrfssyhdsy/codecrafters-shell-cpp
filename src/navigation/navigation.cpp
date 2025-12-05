@@ -12,7 +12,13 @@ void change_directory(const char* path){
     }
     else
     {
+        if (*path=='~')
+        {
+            const char* home_env = getenv("HOME");
+            chdir(home_env);
+        }else{
         std::cout<<"cd: "<<path<<": No such file or directory"<<std::endl;
+        }
     }
     
 }
