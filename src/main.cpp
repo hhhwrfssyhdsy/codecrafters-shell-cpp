@@ -4,7 +4,7 @@
 #include <sys/wait.h>
 #include "core/path_utils.h"
 #include "core/builtin.h"
-#include "navigation/pwd.h"
+#include "navigation/navigation.h"
 
 int main() {
     // Flush after every std::cout / std:cerr
@@ -50,7 +50,10 @@ int main() {
                 }
             }
         }else if(split_commands[0] == "pwd"){
-            path_locate();
+            pwd();
+        }else if(split_commands[0] == "cd"){
+            const char* cd_path = split_commands[1].c_str();
+            change_directory(cd_path);
         }else { 
             auto command_path = check_command_in_path(split_commands[0]);
             std::vector<char*> params;

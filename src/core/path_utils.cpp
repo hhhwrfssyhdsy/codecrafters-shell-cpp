@@ -1,7 +1,9 @@
 #include "core/path_utils.h"
 
-// @brief: check if the command is in the system path 
-// @ret: return the full path of the command executable bin
+/* @brief: check if the command is in the system path 
+* @param command
+* @ret: return the full path of the command executable bin
+*/
 std::string check_command_in_path(std::string command){
     // Check in PATH directories
     const char* path_env = getenv("PATH");

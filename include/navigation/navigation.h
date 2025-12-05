@@ -3,4 +3,5 @@
 #include <unistd.h>
 #include <limits.h>
 
-void path_locate();
+void pwd();
+void change_directory(const char* path);
