@@ -29,9 +29,7 @@ int main() {
         }
         //TODO:改为switch case结构
         if (split_commands[0] == "exit") {
-            if(split_commands.size() > 1 && split_commands[1] == "0") {
-                break;
-            }
+           return 0;
         }else if(split_commands[0] == "echo"){
             for(int i=1;i<split_commands.size();i++){
               std::cout<<split_commands[i]<<' ';
