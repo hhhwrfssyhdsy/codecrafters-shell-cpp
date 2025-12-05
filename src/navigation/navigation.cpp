@@ -6,11 +6,11 @@ void pwd(){
 }
 
 void change_directory(const char* path){
-    try
+    if(access(path,R_OK)==0)
     {
         chdir(path);
     }
-    catch(const std::exception& e)
+    else
     {
         std::cout<<"cd: "<<path<<": No such file or directory"<<std::endl;
     }
